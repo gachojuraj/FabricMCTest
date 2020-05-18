@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "sk.jurij.fabrictest.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+    "ExampleMixin",
+    "ExampleMixine",
+    "Chatup",
+    "HealthMixin",
+    "EntityMixin",
+    "KeyMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
