@@ -6,7 +6,7 @@ import javax.swing.event.ListSelectionListener;
 
 class ListHandler implements ListSelectionListener {
     public void valueChanged(ListSelectionEvent e) {
-        FabricTest.index = ((JList<String>)e.getSource()).getSelectedIndex();
+        EntitySelector.index = ((JList<String>)e.getSource()).getSelectedIndex()-1;
     }
 }
 

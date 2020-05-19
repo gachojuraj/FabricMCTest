@@ -12,29 +12,30 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import sk.jurij.fabrictest.FabricTest;
-
+import sk.jurij.fabrictest.AutoAim;
+import sk.jurij.fabrictest.SerialPort;
 
 @Mixin(ClientPlayerEntity.class)
 
-public abstract class HealthMixin extends LivingEntity{
-	@Shadow @Final protected MinecraftClient client;
-
-	protected HealthMixin(EntityType<? extends LivingEntity> type, World world) {
+public abstract class ClientPlayerMixin extends LivingEntity{
+	protected ClientPlayerMixin(EntityType<? extends LivingEntity> type, World world) {
 		super(type, world);
 	}
 
+	@Shadow @Final protected MinecraftClient client;
+
 	@Inject(at = @At("RETURN"), method = "updateHealth(F)V")
 	public void updateHealth(float f, CallbackInfo info) {
-		FabricTest.sendSerial((int)Math.ceil(super.getHealth())+10);
+		SerialPort.sendSerial((int)Math.ceil(super.getHealth())+10);
 	}
 
-	@Inject(at = @At("HEAD"), method = "method_3148(FF)V")
-	public void method_3148(float f, float g, CallbackInfo info) {
+	//TODO: make moves smoother (move to another class)
+	@Inject(at = @At("HEAD"), method = "tick()V")
+	public void tick(CallbackInfo info) {
 		PlayerEntity player = this.client.player;
-		if (FabricTest.ABToggled && FabricTest.getClosest(player) != null) {
-			player.yaw = FabricTest.calculateYaw(FabricTest.getClosest(player), player);
-			player.pitch = FabricTest.calculatePitch(FabricTest.getClosest(player), player);
+		if (AutoAim.ABToggled && AutoAim.getClosest(player) != null) {
+			player.yaw = AutoAim.calculateYaw(AutoAim.getClosest(player), player);
+			player.pitch = AutoAim.calculatePitch(AutoAim.getClosest(player), player);
 		}
 	}
 }
