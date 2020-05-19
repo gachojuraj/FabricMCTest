@@ -4,7 +4,7 @@ package sk.jurij.fabrictest.mixin;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.client.util.InputUtil.KeyCode;
+import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,6 +21,9 @@ public abstract class KeyMixin{
     @Inject(at = @At("HEAD"), method = "onKey(JIIII)V")
     public void onKey(long window, int key, int scancode, int i, int j, CallbackInfo info) {
         if (key == 66 && InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), 66)) FabricTest.gList();
+        if (key == 67 && InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), 67)) {
+            if (MinecraftClient.getInstance().world != null) FabricTest.ToggleAB();
+        }
     }
 
 }

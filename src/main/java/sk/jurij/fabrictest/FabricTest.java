@@ -1,22 +1,27 @@
+/*
+Note: This mod is written and used for educational purposes only!
+It may not be used on normal minecraft clients.
+ */
+
 package sk.jurij.fabrictest;
 
 import net.fabricmc.api.ModInitializer;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.io.File;
+
 import com.fazecast.jSerialComm.SerialPort;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.TargetPredicate;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.registry.Registry;
 
 public class FabricTest implements ModInitializer{
     @Override
     public void onInitialize() {
-        // This code runs as soon as Minecraft is in a mod-load-ready state.
-        // However, some things (like resources) may still be uninitialized.
-        // Proceed with mild caution.
-
         System.out.println("Hello Fabric world!");
         System.setProperty("java.awt.headless", "false");
     }
@@ -29,7 +34,7 @@ public class FabricTest implements ModInitializer{
             vol.setValue(-30.0f);
             c.start();
         }
-        catch (Exception ignored) {};
+        catch (Exception ignored) {}
     }
 
     public static int prevNum = 0;
@@ -59,9 +64,7 @@ public class FabricTest implements ModInitializer{
         JFrame f = new JFrame("frame");
         f.setLocationRelativeTo(null);
         DefaultListModel<String> l1 = new DefaultListModel<>();
-        Registry.ENTITY_TYPE.forEach(name -> {
-            l1.addElement(name.getName().asString());
-        });
+        Registry.ENTITY_TYPE.forEach(name -> l1.addElement(name.getName().asString()));
         JList<String> list = new JList<>(l1);
         list.setLayoutOrientation(JList.VERTICAL_WRAP);
         list.setVisibleRowCount(-1);
@@ -74,4 +77,33 @@ public class FabricTest implements ModInitializer{
         list.addListSelectionListener(new ListHandler());
     }
     public static int index = -1;
+    public static LivingEntity getClosest(Entity p){
+        try {
+            return p.getEntityWorld().
+                    getClosestEntity(LivingEntity.class, TargetPredicate.DEFAULT, (LivingEntity) p, p.getX(), p.getY(), p.getZ(),
+                            new Box(-100, -100,-100, 100, 100, 100));
+        }
+        catch (Exception ignored){
+            return null;
+        }
+    }
+    public static float calculateYaw(Entity target, Entity player){
+        double x1 = target.getX() - player.getX();
+        double z1 = target.getZ() - player.getZ();
+        double a = Math.asin(x1/Math.sqrt(Math.pow(x1, 2) + Math.pow(z1, 2)))*180/Math.PI;
+        if (z1 < 0) return -(180 - (float)a);
+        return (float)-a;
+    }
+    public static float calculatePitch(Entity target, Entity player){
+        double x1 = target.getX() - player.getX();
+        double z1 = target.getZ() - player.getZ();
+        double y1 = (target.getEyeY() - player.getEyeY());
+        double b1 = Math.sqrt(Math.pow(x1, 2) + Math.pow(z1, 2));
+        double a = Math.asin(y1/Math.sqrt(Math.pow(y1, 2) + Math.pow(b1, 2)))*180/Math.PI;
+        return (float)-a;
+    }
+    public static boolean ABToggled = false;
+    public static void ToggleAB(){
+        ABToggled = !ABToggled;
+    }
 }
