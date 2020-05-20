@@ -11,7 +11,8 @@
     "Chatup",
     "ClientPlayerMixin",
     "EntityMixin",
-    "KeyMixin"
+    "KeyMixin",
+    "RenderMixin"
   ],
   "injectors": {
     "defaultRequire": 1
