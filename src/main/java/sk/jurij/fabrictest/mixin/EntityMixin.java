@@ -32,7 +32,7 @@ public abstract class EntityMixin {
     @Inject(at = @At("HEAD"), method = "isGlowing()Z", cancellable = true)
     public void isGlowing(CallbackInfoReturnable<Boolean> info){
         if (this.type == Registry.ENTITY_TYPE.get(EntitySelector.index)) info.setReturnValue(true);
-        if (this.getEntity().equals(AutoAim.getClosest(MinecraftClient.getInstance().player))) info.setReturnValue(true);
+        if (this.getEntity().equals(AutoAim.getClosest(MinecraftClient.getInstance().player)) && this.getEntity().isAlive()) info.setReturnValue(true);
     }
     //TODO: implement selectable colors
     @Inject(at = @At("HEAD"), method = "getTeamColorValue()I", cancellable = true)

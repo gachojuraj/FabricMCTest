@@ -8,6 +8,7 @@ import net.minecraft.util.math.Box;
 
 public class AutoAim {
     //TODO: fix little glitches
+    //TODO: make configurable
     public static boolean ABToggled = false;
     private static SmoothUtil YawSmoother = new SmoothUtil();
     private static SmoothUtil PitchSmoother = new SmoothUtil();
