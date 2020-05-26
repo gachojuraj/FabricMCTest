@@ -16,8 +16,13 @@ import sk.jurij.fabrictest.CustomLabel;
 
 @Mixin(EntityRenderer.class)
 public abstract class RenderMixin{
+    //TODO: move get methods to another class
     private String getHealth(Entity entity){
         return String.valueOf((int)Math.ceil(Double.parseDouble(entity.getDataTracker().get(entity.getDataTracker().getAllEntries().get(8).getData()).toString())));
+    }
+    private String getName(Entity entity){
+        if (!entity.hasCustomName()) return entity.getType().getName().asString();
+        return entity.getDisplayName().asFormattedString();
     }
     @Shadow public TextRenderer getFontRenderer() {
         return null;
@@ -27,21 +32,12 @@ public abstract class RenderMixin{
     public void render(Entity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
         if (entity.isLiving() && !CustomLabel.hasCustomLabel(entity)) {
             CustomLabel label = CustomLabel.AddCustomLabel(entity);
-            if (!entity.hasCustomName()) label.addRow(entity.getType().getName().asString());
-            else label.addRow(entity.getDisplayName().asFormattedString());
-            label.addRow(getHealth(entity));
-        }
-        if (CustomLabel.hasCustomLabel(entity)){
-            CustomLabel.getInstance(entity).setRow(getHealth(entity), 1);
-            CustomLabel.getInstance(entity).setRow(entity.getDisplayName().asFormattedString(), 0);
+            label.addRow(this::getName);
+            label.addRow(this::getHealth);
         }
         if (CustomLabel.hasCustomLabel(entity)){
             CustomLabel.render(entity, renderManager, matrices, this.getFontRenderer(), vertexConsumers, light);
             info.cancel();
         }
-    }
-    @Inject(at = @At("HEAD"), method = "renderLabelIfPresent(Lnet/minecraft/entity/Entity;Ljava/lang/String;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", cancellable = true)
-    public void renderLabelIfPresent(Entity entity, String string, MatrixStack matrices, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo info) {
-
     }
 }
