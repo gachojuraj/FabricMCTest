@@ -4,7 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.util.math.Matrix4f;
+import net.minecraft.util.math.Matrix4f;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 
@@ -64,7 +64,7 @@ public class CustomLabel {
                 Matrix4f matrix4f = matrices.peek().getModel();
                 float g = MinecraftClient.getInstance().options.getTextBackgroundOpacity(0.25F);
                 int k = (int) (g * 255.0F) << 24;
-                float h = (float) (-textRenderer.getStringWidth(str) / 2);
+                float h = (float) (-textRenderer.getWidth(str) / 2);
                 textRenderer.draw(str, h, (float)-10*ix, -1, false, matrix4f, vertexConsumerProvider, false, k, i);
                 matrices.pop();
             }

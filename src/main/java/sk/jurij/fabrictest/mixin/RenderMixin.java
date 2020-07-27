@@ -21,13 +21,13 @@ public abstract class RenderMixin{
         return String.valueOf((int)Math.ceil(Double.parseDouble(entity.getDataTracker().get(entity.getDataTracker().getAllEntries().get(8).getData()).toString())));
     }
     private String getName(Entity entity){
-        if (!entity.hasCustomName()) return entity.getType().getName().asString();
-        return entity.getDisplayName().asFormattedString();
+        if (!entity.hasCustomName()) return entity.getType().getName().getString();
+        return entity.getDisplayName().asString();
     }
     @Shadow public TextRenderer getFontRenderer() {
         return null;
     }
-    @Final @Shadow protected EntityRenderDispatcher renderManager;
+    @Final @Shadow protected EntityRenderDispatcher dispatcher;
     @Inject(at = @At("HEAD"), method = "render(Lnet/minecraft/entity/Entity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", cancellable = true)
     public void render(Entity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
         if (entity.isLiving() && !CustomLabel.hasCustomLabel(entity)) {
@@ -36,7 +36,7 @@ public abstract class RenderMixin{
             label.addRow(this::getHealth);
         }
         if (CustomLabel.hasCustomLabel(entity)){
-            CustomLabel.render(entity, renderManager, matrices, this.getFontRenderer(), vertexConsumers, light);
+            CustomLabel.render(entity, dispatcher, matrices, this.getFontRenderer(), vertexConsumers, light);
             info.cancel();
         }
     }

@@ -13,7 +13,7 @@ public class EntitySelector {
         f.setLocationRelativeTo(null);
         DefaultListModel<String> l1 = new DefaultListModel<>();
         l1.addElement("none");
-        Registry.ENTITY_TYPE.forEach(name -> l1.addElement(name.getName().asString()));
+        Registry.ENTITY_TYPE.forEach(name -> l1.addElement(name.getName().getString()));
         JList<String> list = new JList<>(l1);
         list.setLayoutOrientation(JList.VERTICAL_WRAP);
         list.setVisibleRowCount(-1);

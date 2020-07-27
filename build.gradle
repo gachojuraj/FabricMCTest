@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.2.6-SNAPSHOT'
+	id 'fabric-loom' version '0.5.11'
 	id 'maven-publish'
 }
 
@@ -21,7 +21,8 @@ dependencies {
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
-	implementation files('C:/Users/mmamm/Downloads/jSerialComm-2.6.2.jar')
+	//implementation files('C:/Users/mmamm/Downloads/jSerialComm-2.6.2.jar')
+	compile 'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
 }
 
 processResources {
